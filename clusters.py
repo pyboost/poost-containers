@@ -12,6 +12,7 @@
 
 """
 __all__ = ['Clusters']
+print('Executing %s' %  __file__)
 
 from .turbolist import TurboList
 

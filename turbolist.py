@@ -10,6 +10,7 @@
 #
 
 __all__ = ['TurboList']
+print('Executing %s' %  __file__)
 
 
 class TurboList (list):

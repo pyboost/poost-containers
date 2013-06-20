@@ -16,6 +16,7 @@ Named dict.
 __all__ = [
     'NamedDict',
 ]
+print('Executing %s' %  __file__)
 
 from collections import OrderedDict
 

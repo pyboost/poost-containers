@@ -12,6 +12,8 @@
 Unit tests
 
 """
+print('Executing %s' %  __file__)
+
 import unittest
 
 from structs import TurboList, LengthAscendingStrings

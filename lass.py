@@ -12,6 +12,7 @@
 
 """
 __all__ = ['LengthAscendingStrings']
+print('Executing %s' %  __file__)
 
 from collections import OrderedDict
 
