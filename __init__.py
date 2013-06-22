@@ -18,6 +18,6 @@ if sys.version_info[:2] < (2, 6):
 from .turbolist import *
 from .clusters import *
 from .lass import *
-from .nameddict import *
+from .structs import *
 
 del sys, absolute_import
