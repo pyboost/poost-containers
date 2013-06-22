@@ -16,7 +16,7 @@ print('Executing %s' %  __file__)
 
 import unittest
 
-from structs import TurboList, LengthAscendingStrings
+from containers import TurboList, LengthAscendingStrings
 
 class Test_LengthAscendingStrings (unittest.TestCase):
 

@@ -16,7 +16,7 @@ print('Executing %s' %  __file__)
 
 import unittest
 
-from structs import TurboList, Clusters
+from containers import TurboList, Clusters
 
 
 class Test_Clusters (unittest.TestCase):
