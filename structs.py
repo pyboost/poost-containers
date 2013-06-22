@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# -- CONTRIBUTORS (sorted by surname) --
-# LUO, Pengkui <pengkui.luo@gmail.com>
-# MEKKY, Hesham <hesham.zakareya@gmail.com>
+# (C) 2013 Pengkui Luo <pengkui.luo@gmail.com>
+# Created 04/20/2013, updated 06/22/2013
 #
+# -- CONTRIBUTORS
+# Hesham Mekky <hesham.zakareya@gmail.com>
 #
-# UPDATED ON
-# 2013: 04/20, 04/21, 65/30, 06/11
-#
-"""
-Named dict.
-
+""" nameddict variants.
 """
 __all__ = [
     'NamedDict',
+    'makestruct',
 ]
 print('Executing %s' %  __file__)
 
+import textwrap
 from collections import OrderedDict
+
 
 class NamedDict (OrderedDict):
     """ NamedDict
@@ -48,3 +47,27 @@ class NamedDict (OrderedDict):
             OrderedDict.__delattr__(self, item)
         else:
             self.__delitem__(item)
+
+
+def makestruct (name, fields):
+    """
+    http://stackoverflow.com/questions/2646157/what-is-the-fastest-to-access-struct-like-object-in-python
+    """
+    fields = fields.split()
+    template = textwrap.dedent("""\
+    class {name}(object):
+        __slots__ = {fields!r}
+        def __init__(self, {args}):
+            {self_fields} = {args}
+        def __getitem__(self, idx):
+            return getattr(self, fields[idx])
+    """).format(
+        name=name,
+        fields=fields,
+        args=','.join(fields),
+        self_fields=','.join('self.' + f for f in fields)
+    )
+    d = {'fields': fields}
+    exec template in d
+    return d[name]
+
