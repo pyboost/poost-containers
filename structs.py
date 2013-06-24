@@ -71,3 +71,23 @@ def makestruct (name, fields):
     exec template in d
     return d[name]
 
+
+def nameddict ():
+    """ Factory function for creating a NamedDict.
+    """
+    pass
+
+
+def namedlist ():
+    """ Factory function for creating a NamedList.
+
+        Note: isn't it just 'recordtype'?
+        http://code.activestate.com/recipes/576555/
+        btw, George Sakkis' activestate recipes are awesome
+        http://code.activestate.com/recipes/users/2591466/
+
+        More references:
+        http://code.activestate.com/recipes/578041-namedlist/
+        http://code.activestate.com/recipes/502237-simple-record-aka-struct-type/
+    """
+    pass
