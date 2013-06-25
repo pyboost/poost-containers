@@ -1,29 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# CONTRIBUTORS (sorted by surname)
-# LUO, Pengkui <pengkui.luo@gmail.com>
+# Copyright (C) 2013 Pengkui Luo <pengkui.luo@gmail.com>
+# Created 04/20/2013, updated 06/25/2013
 #
-#
-# UPDATED ON
-# 2013: 04/20, 04/21, 06/11
-#
-"""
-Unit tests
-
+""" Unit tests
 """
 print('Executing %s' %  __file__)
 
 import unittest
+import os, sys, time
 
-from containers import TurboList, Clusters
+import unittest
+
+import poost.containers as containers
 
 
 class Test_Clusters (unittest.TestCase):
 
     def setUp (self):
-        objects = TurboList ([-9, 'a', (1,2), 222])
-        self.clusters = Clusters (objects)
+        objects = containers.TurboList ([-9, 'a', (1,2), 222])
+        self.clusters = containers.Clusters (objects)
 
     def test__init__ (self):
         clusters = self.clusters
@@ -32,7 +29,7 @@ class Test_Clusters (unittest.TestCase):
 
     def test_merge_1 (self):
 
-        #objects = TurboList ([-9, 'a', (1,2), 222])
+        #objects = containers.TurboList ([-9, 'a', (1,2), 222])
         clusters = self.clusters
         clusters.merge(-9, (1,2))
         self.assertListEqual(clusters._cids, [0, None, 0, None])
@@ -54,7 +51,7 @@ class Test_Clusters (unittest.TestCase):
 
     def test_merge_2 (self):
 
-        #objects = TurboList ([-9, 'a', (1,2), 222])
+        #objects = containers.TurboList ([-9, 'a', (1,2), 222])
         clusters = self.clusters
         clusters.merge(-9, (1,2))
         self.assertListEqual(clusters._cids, [0, None, 0, None])
