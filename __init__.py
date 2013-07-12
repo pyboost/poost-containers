@@ -21,3 +21,5 @@ from .lass import *
 from .structs import *
 
 del sys, absolute_import
+
+__version__ = '0.1.1'
