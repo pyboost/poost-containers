@@ -22,4 +22,4 @@ from .structs import *
 
 del sys, absolute_import
 
-__version__ = '0.1.1'
+__version__ = '0.13.1'
