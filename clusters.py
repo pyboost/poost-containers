@@ -6,15 +6,37 @@
 #
 #
 # UPDATED ON
-# 2013: 04/20, 04/21, 05/30, 06/11
+# 2013: 04/20, 04/21, 05/30, 06/11, 07/29
 #
 """
 
 """
-__all__ = ['Clusters']
+__all__ = [
+    'Cluster',
+    'Clusters',
+]
 print('Executing %s' %  __file__)
 
 from .turbolist import TurboList
+
+class Cluster (set):
+    """ The containter for a cluster.
+
+        It is up to the caller to change every property.
+
+        Warning: users should not assume this is a set type - may change later
+    """
+    def __init__ (self, objects, **kwargs):
+        """ Constructor
+        """
+        set.__init__(self, objects)
+        self.properties = {}
+
+    def extend (self, objects):
+        """ Adds multiple objects to the current cluster.
+        """
+        for obj in objects:
+            set.add(self, obj)
 
 
 class Clusters (dict):
@@ -45,12 +67,17 @@ class Clusters (dict):
         self.unclustered = TurboList(objects)
         self._cids = [None for _ in xrange(len(objects))]
 
+    def get_all_clusters (self):
+        """ Returns a list of all clusters.
+        """
+        return self.values()
+
     def create_cluster (self, objects):
         """ Create a cluster using a subset of objects.
         """
         assert set(objects).issubset(self.raw)
         cid0 = 1 + max([-1]+self.keys())
-        self[cid0] = set(objects)
+        self[cid0] = Cluster(objects)
         for obj in objects:
             i = self.raw.index(obj)
             self._cids[i] = cid0
@@ -71,7 +98,7 @@ class Clusters (dict):
         # Case 1: neither obj1 nor obj2 has been clustered yet.
         if (cid1 is None) and (cid2 is None):
             cid0 = 1 + max([-1]+self.keys())  # in case len(self)==0
-            self[cid0] = set([obj1, obj2])
+            self[cid0] = Cluster([obj1, obj2])
             self._cids[i1] = cid0
             self._cids[i2] = cid0
             self.unclustered.remove(obj1)
@@ -93,14 +120,26 @@ class Clusters (dict):
 
         # Case 4: both obj1 and obj2 have been clustered -> merge 2 clusters
         elif cid1 != cid2:  # if not in the same cluster already
-            cid0 = max(cid1, cid2)
-            set0 = self[cid1].union(self[cid2])
-            del self[cid1]
-            del self[cid2]
-            self[cid0] = set0
-            for obj in set0:
+            # merge the smaller cluster cid9 into the bigger one cid0
+            if len(self[cid1]) >= len(self[cid2]):
+                cid0, cid9 = cid1, cid2
+            else:
+                cid0, cid9 = cid2, cid1
+
+            self[cid0].extend(self[cid9])
+            for obj in self[cid9]:
                 i = self.raw.index(obj)
                 self._cids[i] = cid0
+            del self[cid9]
+
+            #cid0 = max(cid1, cid2)
+            #set0 = self[cid1].union(self[cid2])
+            #del self[cid1]
+            #del self[cid2]
+            #self[cid0] = set0
+            #for obj in set0:
+            #    i = self.raw.index(obj)
+            #    self._cids[i] = cid0
 
         # Case 5: obj1 and obj2 were in the same cluster -> do nothing
         else: cid0 = cid1
@@ -121,7 +160,7 @@ class Clusters (dict):
             self.unclustered.append(cobj)
             i = self.raw.index(cobj)
             self._cids[i] = None
-        self.pop(cid)
+        del self[cid]
 
     def purge_small_clusters (self, smallest_size=3):
         """ Purge clusters with size less than smallest_size.
@@ -143,3 +182,14 @@ class Clusters (dict):
         i1 = self.raw.index(obj1)
         i2 = self.raw.index(obj2)
         return self.indices_in_same_cluster(i1, i2)
+
+
+if __name__ == '__main__':
+
+    def test_Cluster():
+        c1 = Cluster([1, 2, 3])
+        c1.properties['a'] = 'a1'
+        c2 = Cluster([2, 3, 4])
+        c2.properties['a'] = 'a2'
+
+
